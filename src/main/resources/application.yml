@@ -1,15 +1,18 @@
 server:
   baseUrl: http://localhost:3000/
   imageUrl: images/
+  imageServerDir : C:/Users/CAMT/Documents/SE331-lab07/web/images/
 ---
 spring:
   profiles: local
 server:
-  baseUrl: http://localhost:1000/
-  imageUrl: images/
+  baseUrl: http://localhost:8080/
+  imageUrl: student/images/
+  imageServerDir : C:/Users/CAMT/Documents/SE331-lab07/web/images/
 ---
 spring:
   profiles: remote
 server:
   baseUrl: https://s3-ap-southeast-1.amazonaws.com/se331/
   imageUrl: pics/
+
