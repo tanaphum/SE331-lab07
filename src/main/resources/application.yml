@@ -8,7 +8,7 @@ spring:
 server:
   baseUrl: http://localhost:8080/
   imageUrl: student/images/
-  imageServerDir : C:/Users/CAMT/Documents/SE331-lab07/web/images/
+  imageServerDir : C:/Users/Admin/Documents/SE331-lab07/web/images/
 ---
 spring:
   profiles: remote

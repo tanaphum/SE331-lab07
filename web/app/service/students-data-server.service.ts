@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Student} from '../students/student';
-import {Http, Response} from '@angular/http';
+import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Observable} from "rxjs/Rx";
+import {error} from "util";
 
 
 @Injectable()
@@ -47,7 +48,24 @@ export class StudentsDataServerService {
 
   }
 
-  addStudent(student:Student){
+  addStudent(student:Student,file:any){
+    let formData = new FormData();
+    let fileName : String;
+    formData.append('file',file);
+    return this.http.post('http://localhost:8080/student/images',formData)
+      .flatMap(filename => {
+        student.image = filename.text();
+        let headers = new Headers({'Content-Type' : 'application/json'});
+        let options = new RequestOptions({headers: headers,method:'post'})
+        let body = JSON.stringify(student);
+        return this.http.post('http://localhost:8080/student',body,options)
+          .map(res => {
+            return res.json()
+          })
+          .catch((error: any)  => {
+            return Observable.throw(new Error(error.status))
+          })
+      });
 
   }
 }
