@@ -1,29 +1,30 @@
 import {Injectable} from '@angular/core';
 import {Student} from '../students/student';
-import {Http, Response, Headers, RequestOptions} from '@angular/http';
+import {Http, Headers, Response, RequestOptions} from '@angular/http';
 import {Observable} from "rxjs/Rx";
-import {error} from "util";
 
 
 @Injectable()
 export class StudentsDataServerService {
-  constructor(private http: Http){}
-  getStudentsData(){
-    let studentArray:Student[];
+  constructor(private http: Http) {
+  }
+
+  getStudentsData() {
+    let studentArray: Student[];
     return this.http.get('http://localhost:8080/student')
       .map(res => res.json());
 
   }
 
-  getStudent(id:number){
-    let student:Student;
-    return this.http.get('http://localhost:8080/student/'+id)
-      .map((res:Response) => {
+  getStudent(id: number) {
+    let student: Student;
+    return this.http.get('http://localhost:8080/student/' + id)
+      .map((res: Response) => {
         if (res) {
           if (res.status === 200) {
             return res.json()
           }
-          if (res.status === 204){
+          if (res.status === 204) {
             return null;
           }
         }
@@ -43,29 +44,34 @@ export class StudentsDataServerService {
         }
         return error;
       })
-    ;
+      ;
 
 
   }
 
-  addStudent(student:Student,file:any){
+
+
+  addStudent(student: Student,file:any) {
     let formData = new FormData();
-    let fileName : String;
-    formData.append('file',file);
-    return this.http.post('http://localhost:8080/student/images',formData)
+    let fileName: string;
+
+    formData.append('file', file);
+    return this.http.post('http://localhost:8080/student/image', formData)
       .flatMap(filename => {
         student.image = filename.text();
-        let headers = new Headers({'Content-Type' : 'application/json'});
-        let options = new RequestOptions({headers: headers,method:'post'})
+        let headers = new Headers({'Content-Type': 'application/json'});
+        let options = new RequestOptions({headers: headers, method: 'post'});
         let body = JSON.stringify(student);
-        return this.http.post('http://localhost:8080/student',body,options)
+        return this.http.post('http://localhost:8080/student', body, options)
           .map(res => {
             return res.json()
           })
-          .catch((error: any)  => {
+          .catch((error: any) => {
             return Observable.throw(new Error(error.status))
           })
-      });
+      })
+
+
 
   }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by Dto on 3/15/2017.
  */
-public abstract class AbstractStudentDao implements StudentDao{
+public abstract class AbstractStudentDao implements StudentDao {
     List<Student> students;
     String baseUrl;
     String imageUrl;
@@ -31,5 +31,19 @@ public abstract class AbstractStudentDao implements StudentDao{
     public Student findById(long id) {
 
         return students.stream().filter(s -> s.getId() == id).findFirst().orElse(null);
+    }
+
+    @Override
+    public Integer size() {
+        return students.size();
+    }
+
+    @Override
+    public Student addStudent(Student student){
+        //update id
+        int newId = this.size()+1;
+        student.setId(newId);
+        students.add(student);
+        return student;
     }
 }
